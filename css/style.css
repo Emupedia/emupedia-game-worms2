@@ -7,20 +7,20 @@ html, body {
 	height: 100%;
 	overflow: hidden;
 	/* For WebKit (Safari, Google Chrome etc) */
-    background: -webkit-gradient(linear, left top, left bottom, from(#404160), to(#5a413a));
-    /* For Mozilla/Gecko (Firefox etc) */
-    background: -moz-linear-gradient(top, #404160, #5a413a);
-    /* For Internet Explorer 5.5 - 7 */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#404160, endColorstr=#5a413a);
-    /* For Internet Explorer 8 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#404160, endColorstr=#5a413a)";
+	background: -webkit-gradient(linear, left top, left bottom, from(#404160), to(#5a413a));
+	/* For Mozilla/Gecko (Firefox etc) */
+	background: -moz-linear-gradient(top, #404160, #5a413a);
+	/* For Internet Explorer 5.5 - 7 */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#404160, endColorstr=#5a413a);
+	/* For Internet Explorer 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#404160, endColorstr=#5a413a)";
 }
 
 #viewport {
 	background-color: transparent;
 	position: absolute;
 	width: 3920px;
-	height: 1196px;
+	height: 1186px;
 	bottom: 0;
 	left: 50%;
 	margin-left: -1960px;
@@ -32,7 +32,7 @@ canvas {
 	/*background-color: transparent;*/
 	position: absolute;
 	width: 3920px;
-	height: 1196px;
+	height: 1186px;
 	bottom: 0;
 	left: 50%;
 	margin-left: -1960px;
@@ -70,6 +70,12 @@ canvas {
 	height: 13px;
 	margin: 2px;
 	float: left;
+	overflow: hidden;
+}
+
+#UI #windspeed .right, .left {
+	transition: width 60ms;
+	-webkit-transition: width 60ms;
 }
 
 #UI #windspeed .right_container {
@@ -77,15 +83,42 @@ canvas {
 }
 
 #UI #windspeed .left_container .left {
-	background: url('../images/sprites/windleft.png') repeat-x 0 0 transparent;
+	background: url('../images/sprites/windleft.png') repeat-x transparent;
 	height: 13px;
 	width: 87px;
 	float: right;
+	-webkit-animation: scroll-left 5s linear infinite;
+	-moz-animation: scroll-left 5s linear infinite;
+	animation: scroll-left 5s linear infinite;
 }
 
+
+
 #UI #windspeed .right_container .right {
-	background: url('../images/sprites/windright.png') repeat-x 0 0 transparent;
+	background: url('../images/sprites/windright.png') repeat-x transparent;
 	height: 13px;
 	width: 87px;
 	float: left;
+	-webkit-animation: scroll-right 5s linear infinite;
+	-moz-animation: scroll-right 5s linear infinite;
+	animation: scroll-right 5s linear infinite;
+}
+
+
+@-webkit-keyframes scroll-left {
+	0%{
+		background-position: 80px 0;
+	}
+	100%{
+		background-position: 0 0;
+	}
+}
+
+@-webkit-keyframes scroll-right {
+	0%{
+		background-position: 0 0;
+	}
+	100%{
+		background-position: 80px 0;
+	}
 }

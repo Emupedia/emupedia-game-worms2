@@ -1,21 +1,26 @@
 var Vector = Class.create({
-	initialize: function() {
+	initialize: function () {
 		this.value = 0;
 		this.angle = 0;
 		this.X = 0;
 		this.Y = 0;
 	},
-	sync: function() {
+	sync: function () {
 		this.X = Math.round(this.value * Math.cos(this.angle));
 		this.Y = Math.round(this.value * Math.sin(this.angle));
 	},
-	set: function(val, angle) {
+	set: function (val, angle) {
 		this.value = val;
 		this.angle = angle;
 		this.sync();
 		//console.log(this);
 	},
-	add: function(val, angle) {
+	add: function (val, angle) {
+		if (!val) {
+			// no point in computing anything when nothing to add
+			return;
+		}
+
 		//console.log('old:' + this.value + ', ' + this.angle);
 		if (!this.value) {
 			this.value = val;
@@ -32,25 +37,18 @@ var Vector = Class.create({
 			if (Math.abs(this.angle - angle) === Math.PI) {
 				this.angle = this.value > val ? this.angle : angle;
 				this.value -= val;
-				this.sync();
 			} else if (!(this.angle - angle)) {
 				this.value += val;
-				this.sync();
 			} else {
-				this.value = Math.sqrt(this.value * this.value + val * val + 2 * Math.cos(this.angle - angle) * this.value * val);
+				var newVal = Math.sqrt(this.value * this.value + val * val + 2 * Math.cos(this.angle - angle) * this.value * val);
 
-				if (val === 1) {
-					//console.log('val:' + val + ' angle ' + (this.angle-angle) + ' sin: ' + Math.sin(this.angle - angle) + ' val:' + this.value);
-					//console.log(val*Math.sin(this.angle-angle)/this.value + ' for angle:' + angle + ' and value ' + val);
-					//console.log( Math.asin(val*Math.sin(this.angle-angle)/this.value) + ' with: ' + this.angle + ' or ' + angle);
-				}
-
-				var offset = this.angle < 0 ? this.angle < angle ? angle : this.angle : angle;
-				if (!this.value) {
+				if (!newVal) {
 					this.angle = 0;
 				} else {
-					this.angle = offset + Math.asin(val * Math.sin(this.angle - angle) / this.value);
+					this.angle = this.angle - Math.atan2(val * Math.sin(this.angle - angle), this.value + val * Math.cos(this.angle - angle));
 				}
+
+				this.value = newVal;
 			}
 
 			this.sync();

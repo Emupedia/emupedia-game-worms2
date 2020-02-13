@@ -4,7 +4,7 @@ var CHANGE_WEATHER = 2;
 if ("WebSocket" in window) {
 	window.NetworkManager = {};
 
-	NetworkManager.socket = new WebSocket('ws://worms.zadarkside.ro:8888');
+	NetworkManager.socket = new WebSocket('wss://ws.emupedia.net:8888');
 	NetworkManager.socket.onmessage = function (event) {
 		var packet = event.data;
 
@@ -12,11 +12,9 @@ if ("WebSocket" in window) {
 	};
 
 	NetworkManager.handlers = {};
-
 	NetworkManager.handlers[MOUSE_CLICK] = function (data) {
 		kaboom(data.x, data.y, 3);
 	};
-
 	NetworkManager.handlers[CHANGE_WEATHER] = function (data) {
 		E.changeWeather(data.value);
 	};

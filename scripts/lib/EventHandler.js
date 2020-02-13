@@ -5,17 +5,12 @@ var EVENT_KEYDOWN = 3;
 var EVENT_KEYUP = 4;
 var EVENT_RIGHTCLICK = 5;
 
-var KEY_W = 87;
-var KEY_A = 65;
-var KEY_S = 83;
-var KEY_D = 68;
-
 var KEY_LEFT = 37;
 var KEY_UP = 38;
 var KEY_RIGHT = 39;
 var KEY_DOWN = 40;
 var KEY_ENTER = 13;
-var KEY_SPACE = 32;
+var KEY_TAB = 9;
 
 window.EventHandler = {};
 
@@ -31,27 +26,24 @@ EventHandler.hit = [];
 EventHandler.timers[EVENT_DBLKEY] = null;
 EventHandler.hit[EVENT_DBLKEY] = null;
 
-
-EventHandler.bind = function(event, func) {
-	if (!this.queue[event]) {
+EventHandler.bind = function (event, func) {
+	if (!this.queue[event])
 		throw new Error('This event is not defined');
-	}
 
-	if (!func || typeof func != 'function') {
+	if (!func || typeof func != 'function')
 		throw new Error('You failed to specify a valid function for this event ');
-	}
 
 	this.queue[event].push(func);
 };
 
-EventHandler.dispatch = function(event, data) {
+EventHandler.dispatch = function (event, data) {
 	for (var func in this.queue[event]) {
 		// noinspection JSUnfilteredForInLoop
 		this.queue[event][func].apply(null, [data]);
 	}
 };
 
-window.onmousedown = function(event) {
+window.onmousedown = function (event) {
 	var posX = event.clientX;
 	var posY = event.clientY;
 
@@ -78,15 +70,16 @@ window.onmousedown = function(event) {
 	return false;
 };
 
-window.oncontextmenu = function() {
+// noinspection JSUnusedLocalSymbols
+window.oncontextmenu = function (event) {
 	return false;
 };
 
-window.onmousemove = function(event) {
+window.onmousemove = function (event) {
 	EventHandler.dispatch(EVENT_MOUSEMOVE, {x: event.clientX, y: event.clientY});
 };
 
-window.onkeypress = function(event) {
+window.onkeypress = function (event) {
 	if (!this.hit[EVENT_DBLKEY]) {
 		this.hit[EVENT_DBLKEY] = true;
 		this.timers[EVENT_DBLKEY] = setTimeout(function() {
@@ -95,18 +88,19 @@ window.onkeypress = function(event) {
 	} else {
 		var keyNum = null;
 
+		// noinspection JSDeprecatedSymbols
 		if (window.event) {
-			// IE
 			// noinspection JSDeprecatedSymbols
 			keyNum = event.keyCode
-		} else if (event.which) {
-			// Netscape/Firefox/Opera
+		} else {
 			// noinspection JSDeprecatedSymbols
-			keyNum = event.which
+			if (event.which) {
+				// noinspection JSDeprecatedSymbols
+				keyNum = event.which;
+			}
 		}
 
 		clearTimeout(this.timers[EVENT_DBLKEY]);
-
 		EventHandler.dispatch(EVENT_DBLKEY, keyNum);
 
 		if (keyNum !== 116) {
@@ -115,17 +109,19 @@ window.onkeypress = function(event) {
 	}
 };
 
-window.onkeydown = function(event) {
+window.onkeydown = function (event) {
 	var keyNum = null;
 
+	// noinspection JSDeprecatedSymbols
 	if (window.event) {
-		// IE
 		// noinspection JSDeprecatedSymbols
 		keyNum = event.keyCode
-	} else if (event.which) {
-		// Netscape/Firefox/Opera
+	} else {
 		// noinspection JSDeprecatedSymbols
-		keyNum = event.which
+		if (event.which) {
+			// noinspection JSDeprecatedSymbols
+			keyNum = event.which;
+		}
 	}
 
 	EventHandler.dispatch(EVENT_KEYDOWN, keyNum);
@@ -135,17 +131,19 @@ window.onkeydown = function(event) {
 	}
 };
 
-window.onkeyup = function(event) {
+window.onkeyup = function (event) {
 	var keyNum = null;
 
+	// noinspection JSDeprecatedSymbols
 	if (window.event) {
-		// IE
 		// noinspection JSDeprecatedSymbols
 		keyNum = event.keyCode
-	} else if (event.which) {
-		// Netscape/Firefox/Opera
+	} else {
 		// noinspection JSDeprecatedSymbols
-		keyNum = event.which
+		if (event.which) {
+			// noinspection JSDeprecatedSymbols
+			keyNum = event.which;
+		}
 	}
 
 	EventHandler.dispatch(EVENT_KEYUP, keyNum);

@@ -48,8 +48,6 @@ var createClass = function(name, prototype) {
 }
 */
 
-/* Based on Alex Arnell's inheritance implementation. */
-
 function $A(iterable) {
 	if (!iterable) return [];
 	if ('toArray' in Object(iterable)) return iterable.toArray();
@@ -57,7 +55,6 @@ function $A(iterable) {
 	while (length--) results[length] = iterable[length];
 	return results;
 }
-
 
 function $w(string) {
 	if (!Object.isString(string)) return [];
@@ -68,16 +65,14 @@ function $w(string) {
 Array.from = $A;
 
 var Class = (function() {
-
 	var IS_DONTENUM_BUGGY = (function() {
-		for (var p in {toString: 1}) {
+		for (var p in { toString: 1 }) {
 			if (p === 'toString') return false;
 		}
 		return true;
 	})();
 
-	function subclass() {
-	}
+	function subclass() {}
 
 	function create() {
 		var parent = null, properties = $A(arguments);
@@ -109,25 +104,23 @@ var Class = (function() {
 	}
 
 	function addMethods(source) {
-		var ancestor = this.superclass && this.superclass.prototype,
+		var ancestor   = this.superclass && this.superclass.prototype,
 			properties = Object.keys(source);
 
 		if (IS_DONTENUM_BUGGY) {
-			if (source.toString !== Object.prototype.toString)
+			if (source.toString != Object.prototype.toString)
 				properties.push("toString");
-			if (source.valueOf !== Object.prototype.valueOf)
+			if (source.valueOf != Object.prototype.valueOf)
 				properties.push("valueOf");
 		}
 
 		for (var i = 0, length = properties.length; i < length; i++) {
 			var property = properties[i], value = source[property];
 			if (ancestor && Object.isFunction(value) &&
-				value.argumentNames()[0] === "$super") {
+				value.argumentNames()[0] == "$super") {
 				var method = value;
 				value = (function(m) {
-					return function() {
-						return ancestor[m].apply(this, arguments);
-					};
+					return function() { return ancestor[m].apply(this, arguments); };
 				})(property).wrap(method);
 
 				value.valueOf = method.valueOf.bind(method);
@@ -166,25 +159,18 @@ var Class = (function() {
 		NATIVE_JSON_STRINGIFY_SUPPORT = window.JSON &&
 			typeof JSON.stringify === 'function' &&
 			JSON.stringify(0) === '0' &&
-			typeof JSON.stringify(function(x) {
-				return x
-			}) === 'undefined';
+			typeof JSON.stringify(function(x) { return x }) === 'undefined';
 
 	function Type(o) {
-		switch (o) {
-			case null:
-				return NULL_TYPE;
-			case (void 0):
-				return UNDEFINED_TYPE;
+		switch(o) {
+			case null: return NULL_TYPE;
+			case (void 0): return UNDEFINED_TYPE;
 		}
 		var type = typeof o;
-		switch (type) {
-			case 'boolean':
-				return BOOLEAN_TYPE;
-			case 'number':
-				return NUMBER_TYPE;
-			case 'string':
-				return STRING_TYPE;
+		switch(type) {
+			case 'boolean': return BOOLEAN_TYPE;
+			case 'number':  return NUMBER_TYPE;
+			case 'string':  return STRING_TYPE;
 		}
 		return OBJECT_TYPE;
 	}
@@ -207,7 +193,7 @@ var Class = (function() {
 	}
 
 	function toJSON(value) {
-		return Str('', {'': value}, []);
+		return Str('', { '': value }, []);
 	}
 
 	function Str(key, holder, stack) {
@@ -228,12 +214,9 @@ var Class = (function() {
 		}
 
 		switch (value) {
-			case null:
-				return 'null';
-			case true:
-				return 'true';
-			case false:
-				return 'false';
+			case null: return 'null';
+			case true: return 'true';
+			case false: return 'false';
 		}
 
 		type = typeof value;
@@ -245,9 +228,7 @@ var Class = (function() {
 			case 'object':
 
 				for (var i = 0, length = stack.length; i < length; i++) {
-					if (stack[i] === value) {
-						throw new TypeError();
-					}
+					if (stack[i] === value) { throw new TypeError(); }
 				}
 				stack.push(value);
 
@@ -263,7 +244,7 @@ var Class = (function() {
 					for (var i = 0, length = keys.length; i < length; i++) {
 						var key = keys[i], str = Str(key, value, stack);
 						if (typeof str !== "undefined") {
-							partial.push(key.inspect(true) + ':' + str);
+							partial.push(key.inspect(true)+ ':' + str);
 						}
 					}
 					partial = '{' + partial.join(',') + '}';
@@ -286,9 +267,7 @@ var Class = (function() {
 	}
 
 	function keys(object) {
-		if (Type(object) !== OBJECT_TYPE) {
-			throw new TypeError();
-		}
+		if (Type(object) !== OBJECT_TYPE) { throw new TypeError(); }
 		var results = [];
 		for (var property in object) {
 			if (object.hasOwnProperty(property)) {
@@ -306,11 +285,11 @@ var Class = (function() {
 	}
 
 	function clone(object) {
-		return extend({}, object);
+		return extend({ }, object);
 	}
 
 	function isElement(object) {
-		return !!(object && object.nodeType === 1);
+		return !!(object && object.nodeType == 1);
 	}
 
 	function isArray(object) {
@@ -349,22 +328,22 @@ var Class = (function() {
 	}
 
 	extend(Object, {
-		extend: extend,
-		inspect: inspect,
-		toJSON: NATIVE_JSON_STRINGIFY_SUPPORT ? stringify : toJSON,
+		extend:        extend,
+		inspect:       inspect,
+		toJSON:        NATIVE_JSON_STRINGIFY_SUPPORT ? stringify : toJSON,
 		toQueryString: toQueryString,
-		toHTML: toHTML,
-		keys: Object.keys || keys,
-		values: values,
-		clone: clone,
-		isElement: isElement,
-		isArray: isArray,
-		isHash: isHash,
-		isFunction: isFunction,
-		isString: isString,
-		isNumber: isNumber,
-		isDate: isDate,
-		isUndefined: isUndefined
+		toHTML:        toHTML,
+		keys:          Object.keys || keys,
+		values:        values,
+		clone:         clone,
+		isElement:     isElement,
+		isArray:       isArray,
+		isHash:        isHash,
+		isFunction:    isFunction,
+		isString:      isString,
+		isNumber:      isNumber,
+		isDate:        isDate,
+		isUndefined:   isUndefined
 	});
 })();
 /*
@@ -748,19 +727,18 @@ Object.extend(String, {
   }
 }));*/
 
-
-var formatTime = function(time) {
+var formatTime = function (time) {
 	hour = time.getHours();
 	minute = time.getMinutes();
 	second = time.getSeconds();
 
-	if (hour < 10)
+	if(hour < 10)
 		hour = '0' + hour;
 
-	if (minute < 10)
+	if(minute < 10)
 		minute = '0' + minute;
 
-	if (second < 10)
+	if(second < 10)
 		second = '0' + second;
 
 	return hour + ':' + minute + ':' + second;

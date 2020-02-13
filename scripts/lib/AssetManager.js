@@ -9,15 +9,22 @@ AM.lastImageId = 1;
 AM.lastSoundId = 1;
 AM.toLoad = 0;
 
-AM.addImage = function(image, onload) {
-	image = {
-		path: this.imagesPath + image,
+AM.mediaType = {
+	'image': 'image',
+	'sound': 'sound'
+};
+
+AM.allLoaded = function() {
+	return this.toLoad === this.loaded;
+};
+
+AM.addImage = function (imagePath, onLoad) {
+	this.images[this.lastImageId] = {
+		path: this.imagesPath + imagePath,
 		success: false,
 		error: '',
-		onload: onload
+		onLoad: onLoad
 	};
-
-	this.images[this.lastImageId] = image;
 	this.toLoad++;
 
 	this.loadImage(this.lastImageId);
@@ -25,57 +32,69 @@ AM.addImage = function(image, onload) {
 	return this.lastImageId++;
 };
 
-AM.addSound = function(sound, onload) {
-	sound = {
-		path: this.soundsPath + sound,
-		success: false,
-		error: '',
-		onload: onload
-	};
-
-	this.sounds[this.lastSoundId] = sound;
-	this.toLoad++;
-
-	this.loadSound(this.lastSoundId);
-
-	return this.lastSoundId++;
-};
-
-AM.loadImage = function(imageId) {
+AM.loadImage = function (imageId) {
 	var image = this.images[imageId];
 
 	image.data = new Image();
 	image.data.internalId = imageId;
 
-	image.data.onload = function() {
+	image.data.onload = function () {
 		AM.images[this.internalId].success = true;
-		if (AM.images[this.internalId].onload) {
-			AM.images[this.internalId].onload(this.internalId);
+		console.log('Loaded ' + this.internalId);
+
+		if (AM.images[this.internalId].onLoad) {
+			AM.images[this.internalId].onLoad(this.internalId, AM.mediaType.image);
 		}
+
 		AM.loaded++;
 	};
-
 
 	image.data.src = image.path;
 };
 
-AM.loadSound = function(soundId) {
+AM.addSound = function (soundPath, onLoad) {
+	this.sounds[this.lastSoundId] = {
+		path: AM.soundsPath + soundPath,
+		success: false,
+		error: '',
+		onLoad: onLoad
+	};
+
+	this.toLoad++;
+	this.loadSound(this.lastSoundId);
+
+	return this.lastSoundId++;
+};
+
+AM.loadSound = function (soundId) {
 	var sound = this.sounds[soundId];
 
 	sound.data = new Audio();
 	sound.data.internalId = soundId;
 
-	sound.data.loadeddata = function() {
-		console.log('loaded');
+	sound.data.onloadeddata = function () {
+		console.log('loaded sound id' + this.internalId);
 		AM.sounds[this.internalId].success = true;
+		
+		if (AM.sounds[this.internalId].onLoad) {
+			AM.sounds[this.internalId].onLoad(this.internalId, AM.mediaType.sound);
+		}
+
 		AM.loaded++;
 	};
 
 	sound.data.src = sound.path;
 };
 
-AM.play = function(soundId) {
-	if (typeof this.sounds[soundId] !== 'undefined') {
-		this.sounds[soundId].data.play();
-	}
+AM.play = function (soundId) {
+	var sound = this.sounds[soundId];
+	sound.data.play();
+};
+
+AM.unloadImage = function (imageId) {
+	this.images[imageId] = null;
+};
+
+AM.unloadSound = function (soundId) {
+	this.sounds[soundId] = null;
 };

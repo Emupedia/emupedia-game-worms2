@@ -1,2 +1,1 @@
-var Worm = Class.create(Unit, {
-});
+var Worm = Class.create(Unit, {});
