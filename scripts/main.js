@@ -247,7 +247,7 @@ window.onload = function () {
 		explosion.smokeLight[i].loopType = LOOP_DESTROY;
 
 		if (i < 4) {
-			explosion.sounds[i] = AM.addSound('effects/Explosion' + i + '.ogg');
+			explosion.sounds[i] = AM.addSound('effects/explosion' + i + '.ogg');
 
 			explosion.smoke[i] = {};
 			explosion.smoke[i].model = AM.addImage('effects/smkdrk' + (10 + 10 * i) + '.png');
