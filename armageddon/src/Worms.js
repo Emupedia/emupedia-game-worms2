@@ -7101,7 +7101,7 @@ function googlePlusSignIn(authResult)
                             $('#notice').append('<div class="alert alert-success" style="text-align:center"> <strong> Games loaded and your ready to play!! </strong><br> Also thanks for using a modern browser. <a href="#" id="awesome">Your awesome!</a></div> ');
                             $('#awesome').click(function ()
                             {
-                                Notify.display("Awesome!", "<img src='../college/fyp/images/awesome.jpg'/>", 5000);
+                                Notify.display("Awesome!", "<img src='assets/images/awesome.jpg'/>", 5000);
                             });
                         }
                     } else
